@@ -10,7 +10,7 @@ spec:
   - port: 8080
     protocol: TCP
     targetPort: 8080
-    nodePort: 30081
+    nodePort: 30082
   selector:
     app: appscurrency
   type: NodePort

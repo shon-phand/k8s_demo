@@ -1,0 +1,26 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ingress-currency-profile-app
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  rules:
+  - http:
+      paths:
+      - path: /currency
+        pathType: Prefix
+        backend:
+          service:
+            name: appscurrency
+            port:
+              number: 8080
+  - http:
+      paths:
+      - path: /customers
+        pathType: Prefix
+        backend:
+          service:
+            name: appsprofile
+            port:
+              number: 8080

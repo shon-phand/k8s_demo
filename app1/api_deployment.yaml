@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: appsprofile
+  name: appsprofile
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: appsprofile
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: appsprofile
+    spec:
+      containers:
+      - image: shonphand/springboot-apps
+        name: appsprofile
+        ports:
+        - containerPort: 8080
+        resources: {}

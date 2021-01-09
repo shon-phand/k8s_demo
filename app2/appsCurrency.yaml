@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: appscurrency
+  name: appscurrency
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: appscurrency
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: appscurrency
+    spec:
+      containers:
+      - image: shonphand/golang_app2
+        name: appscurrency
+        ports:
+        - containerPort: 8080
+        resources: {}

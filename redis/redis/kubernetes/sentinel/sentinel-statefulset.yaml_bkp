@@ -19,12 +19,13 @@ spec:
         command: [ "sh", "-c" ]
         args:
           - |
-            nodes=redis-0.redis.default.svc.cluster.local,redis-1.redis.default.svc.cluster.local,redis-2.redis.default.svc.cluster.local
+            REDIS_PASSWORD=a-very-complex-password-here
+            nodes=redis-0.redis.redis.svc.cluster.local,redis-1.redis.redis.svc.cluster.local,redis-2.redis.redis.svc.cluster.local
 
             for i in ${nodes//,/ }
             do
                 echo "finding master at $i"
-                MASTER=$(redis-cli --no-auth-warning --raw -h $i  info replication | awk '{print $1}' | grep master_host: | cut -d ":" -f2)
+                MASTER=$(redis-cli --no-auth-warning --raw -h $i -a $REDIS_PASSWORD info replication | awk '{print $1}' | grep master_host: | cut -d ":" -f2)
                 if [ "$MASTER" == "" ]; then
                     echo "no master found"
                     MASTER=
@@ -33,14 +34,14 @@ spec:
                     break
                 fi
             done
-            echo "sentinel monitor mymaster $MASTER.redis.default.svc.cluster.local 6379 2" >> /tmp/master
+            echo "sentinel monitor mymaster $MASTER 6379 2" >> /tmp/master
 
             echo "port 5000
             $(cat /tmp/master)
             sentinel down-after-milliseconds mymaster 5000
             sentinel failover-timeout mymaster 60000
             sentinel parallel-syncs mymaster 1
-            #sentinel auth-pass mymaster $REDIS_PASSWORD
+            sentinel auth-pass mymaster $REDIS_PASSWORD
             " > /etc/redis/sentinel.conf
             cat /etc/redis/sentinel.conf
         volumeMounts:

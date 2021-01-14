@@ -6,11 +6,15 @@ metadata:
     app: appscurrency
   name: appscurrency
 spec:
-  replicas: 1
+  replicas: 2
   selector:
     matchLabels:
       app: appscurrency
-  strategy: {}
+  strategy: 
+    type: RollingUpdate
+    rollingUpdate:
+       maxUnavailable: 1
+       maxSurge: 1
   template:
     metadata:
       creationTimestamp: null
@@ -22,4 +26,26 @@ spec:
         name: appscurrency
         ports:
         - containerPort: 8080
-        resources: {}
+        resources:
+          requests:
+            cpu: 100m
+            memory: 256Mi
+          limits:
+            cpu: 200m
+            memory: 512Mi            
+        livenessProbe:
+         successThreshold: 2
+         failureThreshold: 2
+         initialDelaySeconds: 5
+         periodSeconds: 5
+         httpGet:
+           path: /currency/BTCUSD
+           port: 8080
+        readinessProbe:
+         successThreshold: 2
+         failureThreshold: 2
+         initialDelaySeconds: 25
+         periodSeconds: 5
+         httpGet:
+           path: /currency/BTCUSD
+           port: 8080

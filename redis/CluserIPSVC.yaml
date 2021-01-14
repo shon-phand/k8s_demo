@@ -4,12 +4,12 @@ metadata:
   creationTimestamp: null
   labels:
     app: redis
-  name: redis-service
+  name: redis
 spec:
   ports:
-  - port: 8080
+  - port: 6379
     protocol: TCP
-    targetPort: 8080
+    targetPort: 6379
   selector:
     app: redis
 status:

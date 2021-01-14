@@ -24,3 +24,12 @@ spec:
             name: appsprofile
             port:
               number: 8080
+  - http:
+      paths:
+      - path: /transactions
+        pathType: Prefix
+        backend:
+          service:
+            name: appsprofile
+            port:
+              number: 8080
